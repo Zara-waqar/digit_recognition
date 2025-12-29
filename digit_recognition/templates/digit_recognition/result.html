@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Digit Recognition Result</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f4f8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .result-container {
+        background-color: #fff;
+        padding: 40px 50px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      h2 {
+        color: #333;
+        margin-bottom: 30px;
+      }
+
+      .uploaded-image {
+        max-width: 200px;
+        margin-bottom: 20px;
+        border: 2px solid #ccc;
+        border-radius: 12px;
+      }
+
+      a button {
+        background-color: #2196f3;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+
+      a button:hover {
+        background-color: #0b7dda;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="result-container">
+      {% if prediction %}
+      <h2>Predicted Digit: {{ prediction }}</h2>
+      {% if dp.image %}
+      <img
+        src="{{ dp.image.url }}"
+        alt="Uploaded Digit"
+        class="uploaded-image"
+      />
+      {% endif %} {% endif %}
+      <a href="{% url 'upload' %}"><button>Try another</button></a>
+    </div>
+  </body>
+</html>
