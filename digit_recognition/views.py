@@ -16,15 +16,18 @@ def upload_and_predict(request):
         # Save uploaded image in model
         dp = DigitPrediction.objects.create(image=uploaded_file)
 
-        # Preprocess image
+        # Preprocess image to match training preprocessing
         img = Image.open(dp.image.path).convert('L')  # grayscale
         img = img.resize((28,28))
-        img_array = np.array(img)/255.0
+        img_array = np.array(img).astype('float32') / 255.0
 
-        # Invert colors: black->white, white->black
-        img_array = 1 - img_array
+        # Check if image needs inversion (MNIST format: black digits on white background)
+        # If image has mostly dark pixels (white digits on black), invert it
+        mean_pixel_value = np.mean(img_array)
+        if mean_pixel_value < 0.5:  # Image is mostly dark (white digits on black background)
+            img_array = 1 - img_array  # Invert to match MNIST format
 
-        img_array = img_array.reshape(1,28,28,1)
+        img_array = img_array.reshape(1, 28, 28, 1)
 
         # Predict digit
         prediction = model.predict(img_array)
